@@ -25,8 +25,6 @@ disp("2- Uniforme");
 disp("3- Gaussiano");
 disp("4- Poisson");
 opcao = input('');
-a = input('Intervalo a: ');
-b = input('Intervalo b: ');
 intensidade = input('Informe a porcentagem de ruido desejada: ');
 img = zeros(256,256,'uint8');
 aleatoria = rand(size(imagem));
@@ -34,6 +32,8 @@ aleatoria = rand(size(imagem));
 switch opcao
 
     case 1
+        a = input('Intervalo a: ');
+        b = input('Intervalo b: ');
         Maux = find(aleatoria < intensidade/2);
         img(Maux) = a; % Minimum value
         Maux = find(aleatoria >= intensidade/2 & aleatoria < intensidade);
@@ -42,6 +42,8 @@ switch opcao
         imshow(img);
 
     case 2
+        a = input('Intervalo a: ');
+        b = input('Intervalo b: ');
         p = 1/(b-a);
         j = a;
         aleatoria = aleatoria * intensidade;
@@ -55,15 +57,18 @@ switch opcao
 
     case 3
         aleatoria = aleatoria * intensidade;
+        disp(aleatoria)
         media = input('Informe a media: ');
         var = input('Informe a variancia: ');
-        for z=0:255
+        i = 255;
+        for  z=0:0.003921569:1
             p = (1/(sqrt(2*pi*var)))*exp((-(z-media).^2)/(2*var));
-            Maux = find(aleatoria <= p*intensidade);
-            img(Maux) = z;
+            Maux = find(aleatoria <= p*intensidade);            
+            img(Maux) = i;
+            i = i - 1;
         end
         figure;
-        imshow(img);
+         imshow(uint8(img))
         
     case 4
 
