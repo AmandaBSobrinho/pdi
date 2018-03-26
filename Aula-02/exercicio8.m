@@ -19,11 +19,11 @@ end
 %figure;
 %bar(h);
 
-disp("Escolha um ruido:");
-disp("1- Sal e pimenta");
-disp("2- Uniforme");
-disp("3- Gaussiano");
-disp("4- Poisson");
+disp('Escolha um ruido:');
+disp('1- Sal e pimenta');
+disp('2- Uniforme');
+disp('3- Gaussiana');
+disp('4- Poisson');
 opcao = input('');
 intensidade = input('Informe a porcentagem de ruido desejada: ');
 img = zeros(256,256,'uint8');
@@ -40,7 +40,8 @@ switch opcao
         img(Maux) = b; % Maximum (saturated) value
         figure;
         imshow(img);
-
+        title('Imagem de ruído  - Sal e pimenta');
+        
     case 2
         a = input('Intervalo a: ');
         b = input('Intervalo b: ');
@@ -54,13 +55,14 @@ switch opcao
         end
         figure;
         imshow(img);
-
+        title('Imagem de ruído  - Uniforme');
+        
     case 3
         aleatoria = aleatoria * intensidade;
-        disp(aleatoria)
         media = input('Informe a media: ');
         var = input('Informe a variancia: ');
         i = 255;
+        img = im2double(img);
         for  z=0:0.003921569:1
             p = (1/(sqrt(2*pi*var)))*exp((-(z-media).^2)/(2*var));
             Maux = find(aleatoria <= p*intensidade);            
@@ -68,12 +70,28 @@ switch opcao
             i = i - 1;
         end
         figure;
-         imshow(uint8(img))
+        imshow(uint8(img));
+        title('Imagem de ruído  - Gaussiana');
         
     case 4
-
+        aleatoria = aleatoria * intensidade;
+        lambda = input('Informe lambda: ');
+        k = input('Informe k: ');
+        i = 255;
+        img = im2double(img);
+        for  z=0:0.003921569:1
+            p = (exp(-lambda)*lambda.^k)/(factorial(k));
+            Maux = find(aleatoria <= p*intensidade);            
+            img(Maux) = i;
+            i = i - 1;
+        end
+        figure;
+        imshow(uint8(img));
+        title('Imagem de ruído  - Poisson');
+        
     otherwise
         disp('Valor informado fora do intervalo!');
+        
 end
 figure
-imshow(imadd(imagem, img))
+imshow(imadd(imagem, uint8(img)))
