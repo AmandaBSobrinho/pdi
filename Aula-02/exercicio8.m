@@ -1,0 +1,74 @@
+arq=input('Nome do arquivo: ','s');
+ext=input('Extensao do arquivo (jpg, jpeg, png): ','s');
+imagem=imread(arq,ext);
+%imgcinza=rgb2gray(imagem);
+[m,n] = size(imagem);
+%Zera o vetor do histograma
+for k=1:256
+   h(k)=0;
+end
+
+%Cria o histograma
+for i=1:m
+    for j=1:n
+        ind=double(imagem(i,j))+1;
+        h(ind) = h(ind) + 1;
+    end
+end
+
+%figure;
+%bar(h);
+
+disp("Escolha um ruido:");
+disp("1- Sal e pimenta");
+disp("2- Uniforme");
+disp("3- Gaussiano");
+disp("4- Poisson");
+opcao = input('');
+a = input('Intervalo a: ');
+b = input('Intervalo b: ');
+intensidade = input('Informe a porcentagem de ruido desejada: ');
+img = zeros(256,256,'uint8');
+aleatoria = rand(size(imagem));
+
+switch opcao
+
+    case 1
+        Maux = find(aleatoria < intensidade/2);
+        img(Maux) = a; % Minimum value
+        Maux = find(aleatoria >= intensidade/2 & aleatoria < intensidade);
+        img(Maux) = b; % Maximum (saturated) value
+        figure;
+        imshow(img);
+
+    case 2
+        p = 1/(b-a);
+        j = a;
+        aleatoria = aleatoria * intensidade;
+        for i=p:p:1
+            Maux = find(aleatoria >= i-p & aleatoria < i);
+            j = j + 1;
+            img(Maux) = j;
+        end
+        figure;
+        imshow(img);
+
+    case 3
+        aleatoria = aleatoria * intensidade;
+        media = input('Informe a media: ');
+        var = input('Informe a variancia: ');
+        for z=0:255
+            p = (1/(sqrt(2*pi*var)))*exp((-(z-media).^2)/(2*var));
+            Maux = find(aleatoria <= p*intensidade);
+            img(Maux) = z;
+        end
+        figure;
+        imshow(img);
+        
+    case 4
+
+    otherwise
+        disp('Valor informado fora do intervalo!');
+end
+figure
+imshow(imadd(imagem, img))
