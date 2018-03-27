@@ -1,3 +1,5 @@
+addpath(genpath('passa.m'));
+
 arq=input('Nome do arquivo: ','s');
 ext=input('Extensao do arquivo (jpg, jpeg, png): ','s');
 entrada=imread(arq,ext);
@@ -17,6 +19,7 @@ switch opcao
         disp(mascara)
         m = 3;
         n = 3;
+        passa(2, m ,n, M , N, mascara)
         
     case 2
         mascara(1:5,1:5) = 1/25;
@@ -33,20 +36,6 @@ switch opcao
         
 end
 
-x1 = floor(m/2);
-y1 = floor(n/2);
-
-for x = 0:M-1
-    for y = 0:N-1
-        soma = 0;
-        for i = -x1:x1
-            for j = -y1:y1
-                soma = soma + mascara(i,j)*double(entrada(x-i,y-j));
-            end
-        end
-        saida(x,y) = soma;
-    end
-end
 
 figure;
 imshow(uint8(saida));
