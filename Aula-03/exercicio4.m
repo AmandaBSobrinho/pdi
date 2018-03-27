@@ -1,74 +1,52 @@
 arq=input('Nome do arquivo: ','s');
 ext=input('Extensao do arquivo (jpg, jpeg, png): ','s');
-imagem=imread(arq,ext);
+entrada=imread(arq,ext);
+[M,N] = size(entrada);
 
 disp('Escolha um filtro:');
-disp('1- Passa-Baixa');
-disp('2- Passa-Alta');
+disp('1- Passa-Baixa - 3x3');
+disp('2- Passa-Baixa - 5x5');
+disp('3- Passa-Baixa - 7x7');
 opcao = input('');
-img = zeros(256,256,'uint8');
-aleatoria = rand(size(imagem));
+saida = zeros(M,N);
 
 switch opcao
 
     case 1
-        a = input('Intervalo a: ');
-        b = input('Intervalo b: ');
-        Maux = find(aleatoria < intensidade/2);
-        img(Maux) = a; % Minimum value
-        Maux = find(aleatoria >= intensidade/2 & aleatoria < intensidade);
-        img(Maux) = b; % Maximum (saturated) value
-        figure;
-        imshow(img);
-        title('Imagem de ruido  - Sal e pimenta');
+        mascara(1:3,1:3) = 1/9;
+        disp(mascara)
+        m = 3;
+        n = 3;
         
     case 2
-        a = input('Intervalo a: ');
-        b = input('Intervalo b: ');
-        p = 1/(b-a);
-        j = a;
-        aleatoria = aleatoria * intensidade;
-        for i=p:p:1
-            Maux = find(aleatoria >= i-p & aleatoria < i);
-            j = j + 1;
-            img(Maux) = j;
-        end
-        figure;
-        imshow(img);
-        title('Imagem de ruido  - Uniforme');
-        
+        mascara(1:5,1:5) = 1/25;
+        m = 5;
+        n = 5;
+       
     case 3
-        aleatoria = aleatoria * intensidade;
-        media = input('Informe a media: ');
-        var = input('Informe a variancia: ');
-        i = 255;
-        img = im2double(img);
-        for  z=0:0.003921569:1
-            p = (1/(sqrt(2*pi*var)))*exp((-(z-media).^2)/(2*var));
-            Maux = find(aleatoria <= p*intensidade);            
-            img(Maux) = i;
-            i = i - 1;
-        end
-        figure;
-        imshow(uint8(img));
-        title('Imagem de ruido  - Gaussiana');
-        
-    case 4
-        aleatoria = aleatoria * intensidade;
-        lambda = input('Informe lambda: ');
-        img = im2double(img);
-        for z=0:255
-            p = (exp(-lambda)*lambda.^z)/(factorial(z));
-            Maux = find(aleatoria <= p*intensidade);            
-            img(Maux) = z;
-        end
-        figure;
-        imshow(uint8(img));
-        title('Imagem de ruido  - Poisson');
+        mascara(1:7,1:7) = 1/49;
+        m = 7;
+        n = 7;
         
     otherwise
         disp('Valor informado fora do intervalo!');
         
 end
-figure
-imshow(imadd(imagem, uint8(img)))
+
+x1 = floor(m/2);
+y1 = floor(n/2);
+
+for x = 0:M-1
+    for y = 0:N-1
+        soma = 0;
+        for i = -x1:x1
+            for j = -y1:y1
+                soma = soma + mascara(i,j)*double(entrada(x-i,y-j));
+            end
+        end
+        saida(x,y) = soma;
+    end
+end
+
+figure;
+imshow(uint8(saida));
