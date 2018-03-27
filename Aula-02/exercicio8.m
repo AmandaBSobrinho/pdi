@@ -40,7 +40,7 @@ switch opcao
         img(Maux) = b; % Maximum (saturated) value
         figure;
         imshow(img);
-        title('Imagem de ruído  - Sal e pimenta');
+        title('Imagem de ruido  - Sal e pimenta');
         
     case 2
         a = input('Intervalo a: ');
@@ -55,7 +55,7 @@ switch opcao
         end
         figure;
         imshow(img);
-        title('Imagem de ruído  - Uniforme');
+        title('Imagem de ruido  - Uniforme');
         
     case 3
         aleatoria = aleatoria * intensidade;
@@ -71,23 +71,20 @@ switch opcao
         end
         figure;
         imshow(uint8(img));
-        title('Imagem de ruído  - Gaussiana');
+        title('Imagem de ruido  - Gaussiana');
         
     case 4
         aleatoria = aleatoria * intensidade;
         lambda = input('Informe lambda: ');
-        k = input('Informe k: ');
-        i = 255;
         img = im2double(img);
-        for  z=0:0.003921569:1
-            p = (exp(-lambda)*lambda.^k)/(factorial(k));
+        for z=0:255
+            p = (exp(-lambda)*lambda.^z)/(factorial(z));
             Maux = find(aleatoria <= p*intensidade);            
-            img(Maux) = i;
-            i = i - 1;
+            img(Maux) = z;
         end
         figure;
         imshow(uint8(img));
-        title('Imagem de ruído  - Poisson');
+        title('Imagem de ruido  - Poisson');
         
     otherwise
         disp('Valor informado fora do intervalo!');
