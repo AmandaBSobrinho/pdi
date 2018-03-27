@@ -1,4 +1,3 @@
-addpath(genpath('passa.m'));
 
 arq=input('Nome do arquivo: ','s');
 ext=input('Extensao do arquivo (jpg, jpeg, png): ','s');
@@ -19,23 +18,67 @@ switch opcao
         disp(mascara)
         m = 3;
         n = 3;
-        passa(2, m ,n, M , N, mascara)
+        x1 = floor(m/2);
+        y1 = floor(n/2);
+        for x = 1:M
+            for y = 1:N
+                soma = 0;
+                for i = 1:m
+                    for j = 1:n
+                        if (x-i > 0) && (y-j > 0)
+                            soma = soma + mascara(i,j)*double(entrada(x-i,y-j));
+                        end
+                    end
+                end
+                saida(x,y) = soma;
+            end
+        end
         
     case 2
         mascara(1:5,1:5) = 1/25;
         m = 5;
         n = 5;
+        x1 = floor(m/2);
+        y1 = floor(n/2);
+        for x = 1:M
+            for y = 1:N
+                soma = 0;
+                for i = 1:m
+                    for j = 1:n
+                        if (x-i > 0) && (y-j > 0)
+                            soma = soma + mascara(i,j)*double(entrada(x-i,y-j));
+                        end
+                    end
+                end
+                saida(x,y) = soma;
+            end
+        end
        
     case 3
         mascara(1:7,1:7) = 1/49;
         m = 7;
         n = 7;
+        x1 = floor(m/2);
+        y1 = floor(n/2);
+        for x = 1:M
+            for y = 1:N
+                soma = 0;
+                for i = 1:m
+                    for j = 1:n
+                        if (x-i > 0) && (y-j > 0)
+                            soma = soma + mascara(i,j)*double(entrada(x-i,y-j));
+                        end
+                    end
+                end
+                saida(x,y) = soma;
+            end
+        end
         
     otherwise
         disp('Valor informado fora do intervalo!');
         
 end
 
-
 figure;
 imshow(uint8(saida));
+
