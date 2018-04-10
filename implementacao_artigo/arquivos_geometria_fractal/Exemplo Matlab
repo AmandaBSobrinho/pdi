@@ -1,0 +1,212 @@
+%function [D N NL]=FDbm5(im,F)
+%Hausdorff dimension of color image with the box merge method
+
+%im=image array to be processed. If not exists, a file name will be asked.
+%F=0:do not or 1:plot the log n -log s curve
+%D=the fractal dimension
+%N=the full n-s table
+%NL=the reduced log n - log s table (saturation is rejected, see paper)
+
+%Load an image if not passed as a parameter
+
+%imgDir = 'C:\Users\Profess\Desktop\testeImg\';
+%imagem = imread([imgDir  'exemplo1_rg255gb_128.PNG']);
+%im = imread([imgDir  'Kandinski.PNG']);
+
+% F=1;
+% if nargin==0 || (nargin>0 && size(im,1)==0)
+%     [picturename pathname]=uigetfile({'*.*'},'Choose an image','./');
+%     fullname=[pathname picturename]; im=imread(fullname);
+% end
+% 
+% %im=imresize(im,7);
+% 
+% if nargin<2; F=1; end
+% 
+% %Do some checks in image
+% numcolors=size(im,3); if ~(numcolors==3); error('Not an RGB image.'); end
+% if min(min(min(im)))<0 || max(max(max(im)))>255;
+%     error ('Not an RGB image.');
+% end
+
+%myFolder = 'C:\Users\Goncalves\Documents\1 - UNESP\1-1 - Iniciação 2\Implementacao\ImTestes';
+%Abertura da pasta
+
+clear;
+
+myFolder = uigetdir('C:\Users\User\Desktop\Backup\25_02_2011\Leandro\BACKUP\Pesquisa\PosDoc\Fractal\Imagens\Grau_0','Selecione as pastas onde estão as imagens');
+if ~isdir(myFolder)
+  errorMessage = sprintf('Error: The following folder does not exist:\n%s', myFolder);
+  uiwait(warndlg(errorMessage));
+  return;
+end
+
+%Janela de diálogo requisitando o formato da imagem lida
+formato = inputdlg({'Escolha Extensão (Ex: .jpg, .png, .tif, .bmp'},'Digite o formato utilizado para as imagens ', [1 20]); 
+exte = strcat('*',formato);
+
+filePattern = fullfile(myFolder, char(exte));
+pngFiles = dir(filePattern);
+%Janela de diálogo requisitando a escolha de imagens segmentadas ou não
+[sButton dlgshown] = uigetpref(...
+    'Decisao',... %Grupo
+    'preferencia',... %Nao sei pra que
+    'Escolha de tipo de Processamento', ... %Título da Janela
+    {'As imagens a serem processadas são:                                        '},...
+    {'seg','nseg';'Segmentada','Não Segmentada'});
+
+%result(length(pngFiles),8) = zeros;
+dimensions(1:length(pngFiles)) = zeros;
+
+for p = 1:length(pngFiles)
+  baseFileName = pngFiles(p).name;
+  fullFileName = fullfile(myFolder, baseFileName);
+  fprintf(1, 'Lendo %s\n', fullFileName);
+  fprintf(1, 'Progresso: %d de %d\n',p,length(pngFiles));
+  disp('-------------------------------------------------------');
+  im = imread(fullFileName);
+        %tic
+
+        Lx=size(im,1); Ly=size(im,2); Lz=256;     %image dimensions
+        Lmin=min([Lx Ly Lz]);
+
+        %Initialization
+        itermax=ceil(log2(Lmin)); im=double(im);
+        a(1:Lx*Ly,1:5)=uint16(0);        %Reserve memory space for speed
+        %1st (finest) spatial partitioning in pixel position space
+        s=Lmin; k=0; %s=number of partitions
+        for x=1:Lx;
+            tx=floor((x-1)*s/Lx);
+            for y=1:Ly %  pixels coordinates
+                ty=floor((y-1)*s/Ly); %partition coordinates
+                tr=floor(im(x,y,1)*s/Lz);
+                tg=floor(im(x,y,2)*s/Lz);
+                tb=floor(im(x,y,3)*s/Lz);
+                k=k+1; a(k,:)=[tx ty tr tg tb];
+            end
+        end
+        a=union(a,a(1,:),'rows'); %eliminate same rows
+
+        n=size(a,1); N(itermax,1)=s; N(itermax,2)=n;
+
+        %Partition tables of higher order (coarser)
+        for iter=itermax-1:-1:1
+            b=bitshift(a,-1); b=union(b,b(1,:),'rows');
+            s=s/2; N(iter,1)=s; N(iter,2)=size(b,1);
+            a=b;
+        end
+
+        %Calculate Minkowski dimension
+        NL=log2(N);
+        
+        %Inicializando vetor result, que armazena os tamanhos de caixa 
+        if p==1
+            result(length(pngFiles),itermax) = zeros;
+        end
+        %Montar a matriz para cada imagem e posteriormente salvar no excel
+        %xlswrite('Dados',N(:,2)');
+        x=NL(:,1);y=NL(:,2);
+        NL=NL(NL(:,2)<0.9*log2(Lx*Ly),:);
+        c = fit(NL(:,1),NL(:,2),'poly1'); D=c.p1;
+        %Get N Value and D
+        result(p,:) = N(:,2)';
+        dimensions(p) = D;
+        namesIm{p} = pngFiles(p).name;
+        %toc
+end
+
+tamBox(1:itermax)=zeros;
+for i=1:itermax
+   tamBox(i) = 2^i;
+end
+
+if strcmp(sButton,'nseg') %Se a escolha for de imagem não segmentada
+    xlswrite(myFolder,tamBox ,'Plan1','B2');
+    xlswrite(myFolder, [result,dimensions'],'Plan1','B3');
+
+    for i=1:length(pngFiles)
+            letra = 'A';
+            nume = i+2;
+            conv = num2str(nume);
+            celula = strcat(letra,conv);
+            xlswrite(myFolder, namesIm(i),'Plan1',celula);
+            fprintf(1, 'Gerando arquivo excel %d de %d \n',i,length(pngFiles));
+    end
+else %Caso seja escolhido imagem segmentada
+    resEstroma((length(pngFiles)/3),8) = zeros;
+    dimenEstroma((length(pngFiles)/3)) = zeros;
+
+    resLumens((length(pngFiles)/3),8) = zeros;
+    dimenLumens((length(pngFiles)/3)) = zeros;
+
+    resNucleos((length(pngFiles)/3),8) = zeros;
+    dimenNucleos((length(pngFiles)/3)) = zeros;
+
+    contE=1;
+    contL=1;
+    contN=1;
+    for i=1:length(pngFiles)
+        str = namesIm{i};
+        pattern = 'estroma';
+        resp = strfind(str,pattern);
+        if ~(isempty(resp))
+            resEstroma(contE,:) = result(i,:);
+            dimenEstroma(contE) = dimensions(i);
+            nameEstroma{contE} = pngFiles(i).name;
+            contE = contE + 1;
+        end
+
+        str = namesIm{i};
+        pattern = 'lumens';
+        resp = strfind(str,pattern);
+        if ~(isempty(resp))
+            resLumens(contL,:) = result(i,:);
+            dimenLumens(contL) = dimensions(i);
+            nameLumens{contL} = pngFiles(i).name;
+            contL = contL + 1;
+        end
+
+        str = namesIm{i};
+        pattern = 'nucleos';
+        resp = strfind(str,pattern);
+        if ~(isempty(resp))
+            resNucleos(contN,:) = result(i,:);
+            dimenNucleos(contN) = dimensions(i);
+            nameNucleos{contN} = pngFiles(i).name;
+            contN = contN + 1;
+        end
+    end
+
+    xlswrite(myFolder,tamBox ,'Plan1','B2');
+    xlswrite(myFolder,tamBox,'Plan2','B2');
+    xlswrite(myFolder,tamBox ,'Plan3','B2');
+
+    xlswrite(myFolder, [resEstroma,dimenEstroma'],'Plan1','B3');
+    xlswrite(myFolder, [resLumens,dimenLumens'],'Plan2','B3');
+    xlswrite(myFolder, [resNucleos,dimenNucleos'],'Plan3','B3');
+
+    for i=1:(length(pngFiles)/3)
+            letra = 'A';
+            nume = i+2;
+            conv = num2str(nume);
+            celula = strcat(letra,conv);
+            xlswrite(myFolder, nameEstroma(i),'Plan1',celula);
+    end
+    fprintf(1, 'Gerado estroma \n');
+    for i=1:(length(pngFiles)/3)
+            letra = 'A';
+            nume = i+2;
+            conv = num2str(nume);
+            celula = strcat(letra,conv);
+            xlswrite(myFolder, nameLumens(i),'Plan2',celula);
+    end
+    fprintf(1, 'Gerado lumen \n');
+    for i=1:(length(pngFiles)/3)
+            letra = 'A';
+            nume = i+2;
+            conv = num2str(nume);
+            celula = strcat(letra,conv);
+            xlswrite(myFolder, nameNucleos(i),'Plan3',celula);
+    end
+    fprintf(1, 'Gerado nucleos \n');
+end
