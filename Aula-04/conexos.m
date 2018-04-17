@@ -1,5 +1,4 @@
-function F = conexos(imagem)
-binaria = imbinarize(imagem); 
+function F = conexos(binaria) 
 
 visitados = false(size(binaria)); % Marca os elementos já visitados (analisados)
 [m,n] = size(binaria);
