@@ -7,7 +7,7 @@ mat1(:, :) = 150;
 mat1 = uint8(mat1);
 figure;
 imshow(imbinarize(mat1));
-title(conexos(mat1));
+title(conexos(imbinarize(mat1)));
 
 [l,n] = bwlabel(imbinarize(mat1));
 disp(n);
@@ -21,7 +21,7 @@ mat1(128:256, :) = 200;
 mat1 = uint8(mat1);
 figure;
 imshow(imbinarize(mat1));
-title(conexos(mat1));
+title(conexos(imbinarize(mat1)));
 
 [l,n] = bwlabel(imbinarize(mat1));
 disp(n);
@@ -39,7 +39,7 @@ mat1(177:197, 167:207) = 150;
 mat1 = uint8(mat1);
 figure;
 imshow(imbinarize(mat1));
-title(conexos(mat1));
+title(conexos(imbinarize(mat1)));
 
 [l,n] = bwlabel(imbinarize(mat1));
 disp(n);
@@ -54,7 +54,7 @@ mat1(128:256, 127:256) = 256;
 mat1 = uint8(mat1);
 figure;
 imshow(imbinarize(mat1));
-title(conexos(mat1));
+title(conexos(imbinarize(mat1)));
 
 [l,n] = bwlabel(mat1);
 disp(n);
@@ -85,7 +85,7 @@ mat1(192:256, 192:256) = 256;
 mat1 = uint8(mat1);
 figure;
 imshow(imbinarize(mat1));
-title(conexos(mat1));
+title(conexos(imbinarize(mat1)));
 
 [l,n] = bwlabel(imbinarize(mat1));
 disp(n);
