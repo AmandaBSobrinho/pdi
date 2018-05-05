@@ -1,4 +1,4 @@
-function [H,S,I]  = rgbParahsi(R,G,B)
+function img  = rgbParahsi(R,G,B)
 H = acos(((R-G)+(R-B))./(2.*(sqrt((double((R-G).^2+(R-B).*(G-B)))))));
 S = 1 - ((3.*min(R,min(G,B)))./(R+G+B));
 I = (R+G+B)/3;

@@ -5,4 +5,4 @@ figure;
 imshow(imagem);
 title('Imagem original');
 
-fatiamento(imagem);
+fatiamento8(imagem);
