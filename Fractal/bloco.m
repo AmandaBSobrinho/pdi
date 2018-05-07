@@ -2,31 +2,42 @@ function intLum = bloco(img, tamanhoBloco, indice, qtdBlocoX, qtdBlocoY)
     blocoImg=zeros(tamanhoBloco(indice), tamanhoBloco(indice));
     intLum=zeros(1, qtdBlocoX*qtdBlocoY);
     
-    tamanhoBlock = tamanhoBloco(indice);
-    tamanhoMaximoX = tamanhoBloco(indice)*qtdBlocoX;
-    tamanhoMaximoY = tamanhoBloco(indice)*qtdBlocoY;
-    
-    m = 1;
+    inicioX = 1;
+    inicioY = 1;
+    qbX = 1;
+    qbY = 1;
     z = 1;
-    for i=1:tamanhoMaximoX
-        % Verifica se percorreu todos os blocos em X
-        if i == m*tamanhoBlock
-            % Identifica a maior intensidade do bloco
-            intLum(z) = intensidade(blocoImg);
-            m = m + 1;
-            z = z + 1;
-        end
+    
+    while(qbX <= qtdBlocoX)
+        ateX = tamanhoBloco(indice)*qbX;
+        ateY = tamanhoBloco(indice)*qbY;
+        r = 0;
+        s = 0;
         
-        for j=1:tamanhoMaximoY
-            % Verifica de percorreu todos os blocos em Y
-            if j == n*tamanhoBloco(indice)
-                n = n + 1;            
-            end
-        
-            blocoImg(r,s) = img(i,j);
-            s = s + 1;
+        for i=inicioX:ateX
+            r = r + 1;
+            for j=inicioY:ateY
+                s = s + 1;
+                blocoImg(r,s) = img(i,j);   
+                if (i == ateX) & (j == ateY)
+                    intLum(z) = intensidade(blocoImg);
+                    
+                    if qbY < qtdBlocoY
+                        qbY = qbY + 1;
+                        inicioY = ateY;
+                    else
+                        inicioX = ateX;
+                        inicioY = 1;
+                        qbX = qbX + 1;
+                        qbY = 1;        
+                    end
+                    
+                    r = 0;
+                    s = 0;
+                    z = z + 1;
+                end            
+            end     
+            s = 0;
         end
-        r = r + 1;
-   
     end
 end
