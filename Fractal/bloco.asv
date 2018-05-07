@@ -1,0 +1,42 @@
+function intLum = bloco(img, tamanhoBloco, indice, qtdBlocoX, qtdBlocoY)
+    blocoImg=zeros(tamanhoBloco(indice), tamanhoBloco(indice));
+    intLum=zeros(1, qtdBlocoX*qtdBlocoY);
+    
+    % i e j ajudam a percorre a imagem
+    % m e n ajudam a realizar a contagem dos blocos
+    % r e s ajudam a controlar o bloco auxiliar blocoImg
+    % z controla o índice de luminosidade máxima refente a cada bloco
+    m = 1;
+    n = 1;
+    z = 1;
+    r = 1;
+    s = 1;
+    
+    tamanhoMaximo = tamanhoBloco(indice)*qtdBlocoX;
+    for i=1:tamanhoMaximo
+        s = 1;
+        
+        
+        % Verifica de percorreu todos os blocos em X
+        if i == m*tamanhoBloco(indice)
+            % Identifica a maior intensidade do bloco
+            intLum(z) = intensidade(blocoImg);
+            intLum
+            m = m + 1;
+            z = z + 1;
+            r = 1; 
+        end
+        
+        for j=1:tamanhoBloco(indice)*qtdBlocoY
+            % Verifica de percorreu todos os blocos em Y
+            if j == n*tamanhoBloco(indice)
+                n = n + 1;            
+            end
+        
+            blocoImg(r,s) = img(i,j);
+            s = s + 1;
+        end
+        r = r + 1;
+   
+    end
+end
