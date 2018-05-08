@@ -10,14 +10,14 @@ imagem=imread(arq,ext);
 img=rgb2gray(imagem);
 [x,y] = size(img);
 
-% Define o tamanho do bloco inicial
+% Define o tamanho da caixa inicial
 if x <= y
   lmax = x;
 else
   lmax = y;
 end
 
-% Inícia vetor de tamanhos de blocos possíveis e de intensidades
+% Inícia vetor de tamanhos das caixas possíveis e de intensidades
 L = zeros(1, floor(log2(lmax)));
 
 % Define o tamanho (L) das caixas 
@@ -44,13 +44,26 @@ for i=1:qtdCaixas
     T(i) = qtdCaixaX*qtdCaixaY;
     
     % Total de caixas Q(L) contadas na imagem com alguma informação (intensidade luminosa)
-    Q(i) = sum(I/L(i));
-    
+    Q(i) = sum(I/L(i));   
 end
-%======================================================================%
 
+% Dimensão fractal da imagem Q(L)/T(L)
+fprintf('\n---------- DIMENSÃO FRACTAL Q(L)/T(L)-----------\n');
+fractal = Q./T;
+for i=1:qtdCaixas
+    fprintf('Para L = %f -> Dimensão fractal = %f\n',L(i), fractal(i));
+end
 
+% Dimensão fractal da textura da imagem
+fprintf('\n------ DIMENSÃO FRACTAL DA TEXTURA DA IMAGEM -------\n');
+textura = log2(Q)/log2(T); 
+fprintf('%f\n',tan(textura));
 
+% Imprime graficos
+figure
+plot(T,Q)
+grid on
 
-
-
+figure
+plot(log2(T),log2(Q))
+grid on
