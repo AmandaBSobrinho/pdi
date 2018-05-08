@@ -10,34 +10,41 @@ imagem=imread(arq,ext);
 img=rgb2gray(imagem);
 [x,y] = size(img);
 
-%=================Implementação usando blockproc======================%
-
 % Define o tamanho do bloco inicial
 if x <= y
-  tamanhoBlocoInicial = x;
+  lmax = x;
 else
-  tamanhoBlocoInicial = y;
+  lmax = y;
 end
 
 % Inícia vetor de tamanhos de blocos possíveis e de intensidades
-tamanhoBloco = zeros(1, floor(log2(tamanhoBlocoInicial)));
+L = zeros(1, floor(log2(lmax)));
 
-% Preenche os tamanhos dos blocos
-tamanhoBloco(1) = tamanhoBlocoInicial;
-[~,qtdBlocos] = size(tamanhoBloco);
-for i=2:qtdBlocos
-   tamanhoBloco(i) = floor(tamanhoBloco(i-1)/2);
+% Define o tamanho (L) das caixas 
+L(1) = lmax;
+[~,qtdCaixas] = size(L);
+for i=2:qtdCaixas
+   L(i) = floor(L(i-1)/2);
 end
 
 % Calcula quantidade de blocos relativo a cada tamanho
-for i=1:qtdBlocos
+T = zeros(1, qtdCaixas);
+Q = zeros(1, qtdCaixas);
+for i=1:qtdCaixas
     % Em x
-    qtdBlocoX = floor(x/tamanhoBloco(i));
+    qtdCaixaX = floor(x/L(i));
 
     % Em y
-    qtdBlocoY = floor(y/tamanhoBloco(i));
+    qtdCaixaY = floor(y/L(i));
     
-    maiorIntensidade = bloco(img, tamanhoBloco, i, qtdBlocoX, qtdBlocoY);
+    % Obtem as intensidades I de cada bloco para cada tamanho de caixa i
+    I = bloco(img, L, i, qtdCaixaX, qtdCaixaY);
+    
+    % Total de caixas T(L) obtido a partir da dimensão da imagem
+    T(i) = qtdCaixaX*qtdCaixaY;
+    
+    % Total de caixas Q(L) contadas na imagem com alguma informação (intensidade luminosa)
+    Q(i) = sum(I/L(i));
     
 end
 %======================================================================%
