@@ -56,8 +56,10 @@ if tamanhoJanela == 3 || tamanhoJanela == 5
     %HSI
     imgHSI = rgbParahsi(double(img(:, :, 1)),double(img(:, :, 1)),double(img(:, :, 3)));
        
-    imgHSIMed(:,:,1) = mediana(imgHSI(:,:,1), tamanhoJanela);
-    imgHSIMed(:,:,2) = mediana(imgHSI(:,:,2), tamanhoJanela);
+    %imgHSIMed(:,:,1) = mediana(imgHSI(:,:,1), tamanhoJanela);
+    imgHSIMed(:,:,1) = imgHSI(:,:,1);
+    %imgHSIMed(:,:,2) = mediana(imgHSI(:,:,2), tamanhoJanela);
+    imgHSIMed(:,:,2) = imgHSI(:,:,2);
     imgHSIMed(:,:,3) = mediana(imgHSI(:,:,3), tamanhoJanela);
     
     figure;
