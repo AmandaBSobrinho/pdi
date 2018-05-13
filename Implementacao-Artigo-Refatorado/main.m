@@ -6,15 +6,15 @@ ext=input('Extensao do arquivo (jpg, jpeg, png): ','s');
 
 % Leitura da Imagem
 img_input=imread(arq,ext);
-figure; imshow(img_input);
+figure; imshow(img_input); title('Imagem original');
 
 % Divide imagem em blocos de 8x8 e aplica o DCT em cada nível de cor, R, G e B
 img_block = blockproc(img_input, [8 8], @dct_rgb);
-figure; imshow(img_block);
+figure; imshow(img_block); title('Após aplicacação DCT');
 
 % Quantização da imagem aplicada sobre cada bloco DCT
 img_quant = blockproc(img_block, [8 8], @dct_quantization);
-figure; imshow(img_quant);
+figure; imshow(img_quant); title('Após aplicacação Quantização');
 
 % Aplicação Ziz-Zag em cada bloco
 %img_zigzag = blockproc(img_quant(:,:,1), [8 8], @dct_zigzag);
@@ -23,24 +23,10 @@ figure; imshow(img_quant);
 img=rgb2gray(img_input);
 [x,y] = size(img);
 
-% Calcula quantidade de blocos relativo a cada tamanho
-% Em x
-qtdCaixaX = floor(x/8);
+% Huffman encode
+[img_compress, img_dict] = huffman_encode(img);
+figure; imshow(img_compress); title('Huffman encoded');
 
-% Em y
-qtdCaixaY = floor(y/8);
-
-% Bloco fractal
-% Obtém as intensidades I de cada bloco para cada tamanho de caixa i
-blocoFractal = fractal_bloco(img, 8, qtdCaixaX, qtdCaixaY);
-    
-% Total de caixas T obtido a partir da dimensão da imagem
-T = qtdCaixaX*qtdCaixaY;
-    
-% Total de caixas Q contadas na imagem com alguma informação (intensidade luminosa)
-Q = blocoFractal./8; 
-
-% Dimensão fractal de cada bloco
-dimensaoFractal = Q/T;
-     
-% Calcular distância Euclidiana com vizinhança 8 para os blocos
+% Huffnab decode
+img_decompress = huffman_decode(img_compress, img_dict);
+figure; imshow(img_decompress); title('Huffman encoded');
