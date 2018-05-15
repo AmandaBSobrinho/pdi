@@ -1,9 +1,18 @@
-function [compress, dict] = huffman_encode(image)
+function [compress, dict] = huffman_encode(imagem)
 
-    symbols= unique(double(image));% Distinct symbols that data source can produce
-    counts = hist(image(:), symbols);%find counts of symblos in given data
-    p = counts./ sum(counts);% Probability distribution
-    dict = huffmandict(symbols,p); % Create dictionary.
-    compress = huffmanenco(data,dict);% Encode the data.
+    % Identifica as intensidades de forma única na imagem
+    simbolos= unique(uint8(imagem));
+    
+    % Encontra a contagem/frequência de cada intensidade na imagem
+    contagem = hist(imagem(:), simbolos);
+    
+    % Distribuição probabilística de cada intensidade
+    p = contagem./ sum(contagem);
+    
+    % Cria um dicionário correspondente as intensidades e suas probabilidades 
+    dict = huffmandict(simbolos,p); 
+    
+    % Codifica a imagem 
+    compress = huffmanenco(imagem,dict);
 
 end
