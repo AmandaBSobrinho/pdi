@@ -10,7 +10,7 @@ imagem=imread(arq,ext);
 img=rgb2gray(imagem);
 [x,y] = size(img);
 
-%img=randi([0,1],512);
+img=randi([256,256],512);
 
 
 % Define o tamanho da caixa inicial
@@ -47,28 +47,28 @@ for i=1:qtdCaixas
     I = bloco(img, L, i, qtdCaixaX, qtdCaixaY);
     
     % Total de caixas T(L) obtidos a partir da dimensão da imagem
-    T(i) = qtdCaixaX*qtdCaixaY;
+    T(i) = qtdCaixaX*qtdCaixaY*qtdCaixaZ;
     
     % Total de caixas Q(L) contadas na imagem com alguma informação (intensidade luminosa)
-    Q(i) = ceil(sum(I/L(i)));   
+    Q(i) = sum(ceil(I./L(i)));
 end
 
 % Dimensão fractal da imagem Q(L)/T(L)
-fprintf('\n---------- DIMENSÃO FRACTAL Q(L)/T(L)-----------\n');
-fractal = Q./T;
+fprintf('\n---------- Proporção de informação ocupada na imagem T(L)/Q(L)-----------\n');
+proporcao = Q./T;
 for i=1:qtdCaixas
-    fprintf('L = %d -> Dimensão fractal = %.4f\n',L(i), fractal(i));
+    fprintf('L = %d -> Informação = %.2f%%\n',L(i), proporcao(i)*100);
 end
 
 % Dimensão fractal da textura da imagem
-fprintf('\n------ DIMENSÃO FRACTAL DA TEXTURA DA IMAGEM -------\n');
-textura = log2(Q)./log2(T); 
-fprintf('%.4f\n',tan(textura));
+fprintf('\n------ DIMENSÃO FRACTAL DA IMAGEM (TEXTURA)-------\n');
+textura = (log2(Q(qtdCaixas))-log2(Q(1))) / (log2(T(qtdCaixas))-log2(T(1))); 
+fprintf('%.4f\n',textura);
 
 % Imprime graficos
 figure
 plot(T,Q)
-title('T(L) x Q(L)')
+title('Proporção de informação ocupada na imagem T(L) x Q(L)')
 grid on
 
 figure

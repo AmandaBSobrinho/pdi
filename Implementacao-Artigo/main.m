@@ -27,11 +27,10 @@ img_decoded = huffman_decode(img_encoded, img_dict);
 %figure; imshow(img_decoded); title('Após aplicação da decodificação de Huffman');
 
 img_decoded_recovery = reshape(img_decoded, size(img_quant));
-figure;
-imshow(img_decoded_recovery);
-title('Após aplicação da decodificação de Huffman');
+figure; imshow(img_decoded_recovery); title('Após aplicação da decodificação de Huffman');
+
 % Dequantização da imagem aplicada sobre cada bloco DCT
-img_dequant = blockproc(im2double(img_decoded_recovery), [8 8], @dct_dequantization);
+img_dequant = blockproc(img_decoded_recovery, [8 8], @dct_dequantization);
 figure; imshow(img_dequant); title('Após aplicacação Dequantização');
 
 % Divide imagem em blocos de 8x8 e aplica o DCT inverso nos 3 canais de cor
