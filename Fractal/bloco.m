@@ -1,5 +1,5 @@
-function intLum = bloco(img, tamanhoBloco, indice, qtdBlocoX, qtdBlocoY)
-    blocoImg=zeros(tamanhoBloco(indice), tamanhoBloco(indice));
+function intLum = bloco(img, tamanhoBloco, qtdBlocoX, qtdBlocoY)
+    blocoImg=zeros(tamanhoBloco, tamanhoBloco);
     intLum=zeros(1, qtdBlocoX*qtdBlocoY);
     
     inicioX = 1;
@@ -9,8 +9,8 @@ function intLum = bloco(img, tamanhoBloco, indice, qtdBlocoX, qtdBlocoY)
     z = 1;
     
     while(qbX <= qtdBlocoX)
-        ateX = tamanhoBloco(indice)*qbX;
-        ateY = tamanhoBloco(indice)*qbY;
+        ateX = tamanhoBloco*qbX;
+        ateY = tamanhoBloco*qbY;
         r = 0;
         s = 0;
         
