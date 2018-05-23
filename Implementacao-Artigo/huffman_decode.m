@@ -1,5 +1,6 @@
 function decompress = huffman_decode(compress, dict)
 
-    decompress = huffmandeco(compress,dict);% decode the image.
+    % Decodifica a imagem
+    decompress = huffmandeco(compress,dict);
 
 end
