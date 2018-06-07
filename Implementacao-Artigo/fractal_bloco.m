@@ -1,6 +1,6 @@
 function intLum = fractal_bloco(img, tamanhoBloco, qtdBlocoX, qtdBlocoY)
-    blocoImg=zeros(tamanhoBloco, tamanhoBloco);
-    intLum=zeros(qtdBlocoX, qtdBlocoY);
+    blocoImg=zeros(1, tamanhoBloco);    
+    intLum=zeros(1, qtdBlocoX*qtdBlocoY);
     
     inicioX = 1;
     inicioY = 1;
@@ -9,7 +9,7 @@ function intLum = fractal_bloco(img, tamanhoBloco, qtdBlocoX, qtdBlocoY)
     z = 1;
     
     while(qbX <= qtdBlocoX)
-        ateX = tamanhoBloco*qbX;
+        ateX = 1;
         ateY = tamanhoBloco*qbY;
         r = 0;
         s = 0;
@@ -20,8 +20,7 @@ function intLum = fractal_bloco(img, tamanhoBloco, qtdBlocoX, qtdBlocoY)
                 s = s + 1;
                 blocoImg(r,s) = img(i,j);   
                 if (i == ateX) & (j == ateY)
-                    intLum(qbX, qbY) = dct_zigzag(blocoImg);
-                    intLum(qbX, qbY) =
+                    intLum(z) = fractal_intensidade(blocoImg);
                     
                     if qbY < qtdBlocoY
                         qbY = qbY + 1;

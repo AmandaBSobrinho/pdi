@@ -1,6 +1,7 @@
-function domainBlock = fractal_vizinhanca8(imgFractal, x, y)
-    Dtsh = 1; % treshold a ser definido
-
+function domainBlock = fractal_vizinhanca8(block_struct,dtsh)
+    imgFractal = block_struct.data;
+    
+    x=2; y=2;
     a = imgFractal(x,y);
     Nb1 = imgFractal(x-1,y-1);
     Nb2 = imgFractal(x-1,y);
@@ -12,70 +13,61 @@ function domainBlock = fractal_vizinhanca8(imgFractal, x, y)
     Nb8 = imgFractal(x+1,y+1);
 
 
-    % Define valor do "range block"
+    % Define valor do "range block"(pixel central)
     domainBlock(x,y) = a;
-
 
     % Define flags para o "domain blocks"
 	% Vizinho 1
-    distanciaE = fractal_distanciaEuclidiana(a,Nb1);
-    if distanciaE < Dtsh
+    if norm(a-Nb1) < dtsh
     	domainBlock(x-1,y-1) = 1;
     else
     	domainBlock(x-1,y-1) = 0;
     end
 
 	% Vizinho 2
-    distanciaE = fractal_distanciaEuclidiana(a,Nb2);
-    if distanciaE < Dtsh
+    if norm(a-Nb2) < dtsh
     	domainBlock(x-1,y) = 1;
     else
     	domainBlock(x-1,y) = 0;
     end
 
 	% Vizinho 3
-    distanciaE = fractal_distanciaEuclidiana(a,Nb3);
-    if distanciaE < Dtsh
+    if norm(a-Nb3) < dtsh
     	domainBlock(x-1,y+1) = 1;
     else
     	domainBlock(x-1,y+1) = 0;
     end
 
 	% Vizinho 4
-    distanciaE = fractal_distanciaEuclidiana(a,Nb4);
-    if distanciaE < Dtsh
+    if norm(a-Nb4) < dtsh
     	domainBlock(x,y-1) = 1;
     else
     	domainBlock(x,y-1) = 0;
     end
 
 	% Vizinho 5
-    distanciaE = fractal_distanciaEuclidiana(a,Nb5);
-    if distanciaE < Dtsh
+    if norm(a-Nb5) < dtsh
     	domainBlock(x,y+1) = 1;
     else
     	domainBlock(x,y+1) = 0;
     end
 
 	% Vizinho 6
-    distanciaE = fractal_distanciaEuclidiana(a,Nb6);
-    if distanciaE < Dtsh
+    if norm(a-Nb6) < dtsh
     	domainBlock(x+1,y-1) = 1;
     else
     	domainBlock(x+1,y-1) = 0;
     end
 
 	% Vizinho 7
-    distanciaE = fractal_distanciaEuclidiana(a,Nb7);
-    if distanciaE < Dtsh
+    if norm(a-Nb7) < dtsh
     	domainBlock(x+1,y) = 1;
     else
     	domainBlock(x+1,y) = 0;
     end
 
 	% Vizinho 8
-    distanciaE = fractal_distanciaEuclidiana(a,Nb8);
-    if distanciaE < Dtsh
+    if norm(a-Nb8) < dtsh
     	domainBlock(x+1,y+1) = 1;
     else
     	domainBlock(x+1,y+1) = 0;

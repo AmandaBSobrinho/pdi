@@ -44,6 +44,6 @@ img_zigzag = zigzag_nonzeros(blockproc(rgb2gray(img_quant), [tamBloco tamBloco],
 img_fractal = fractal_tabela(img_zigzag, tamBloco);
 
 % Calcula a semelhança entre as dimensões fractais dos blocos-vizinhança8
-img_semelhante = blockproc(img_fractal, [3 3], @fractal_vizinhanca8,'dtsh','0.1', 'PadPartialBlocks',true);
+img_semelhante = blockproc(img_fractal, [3 3], @fractal_vizinhanca8());
 
 
