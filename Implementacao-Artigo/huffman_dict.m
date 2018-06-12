@@ -12,6 +12,6 @@ function dict = huffman_dict(imagem)
     p = contagem./ sum(contagem);
     
     % Cria um dicionário correspondente as intensidades e suas probabilidades 
-    dict = huffmandict(simbolos,p); 
+    dict = huffmandict(simbolos,p'); 
     
 end
