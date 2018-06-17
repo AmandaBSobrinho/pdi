@@ -1,0 +1,18 @@
+imagem = imread('LCM1.jpg');
+info = imfinfo('LCM1.jpg');
+
+%converte para HSI
+imagem_hsi = rgb_to_hsi(double(imagem)/255);
+
+%equaliza somente a camada I
+imagem_hsi(:,:,3) = histo_eq(uint8(imagem_hsi(:,:,3) .* 255), info);
+
+figure;
+imshow(imagem_hsi);
+
+quantized = quantize(imagem_hsi(:,:,3));
+
+rgb = label2rgb(quantized);
+
+figure;
+imshow(rgb);
