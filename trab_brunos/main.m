@@ -23,11 +23,20 @@ B8 = [1 1 1
       1 1 1];
 
 %filtros morfológicos
-% - imagem_seg_1: fechamento(abertura(imagem_seg_1,B8), B8) 
-imagem_morf_1 = erosao(imagem_seg_1,B4);
-figure, imshow(imagem_morf_1); title('Imagem1 erosao B4');
+% - imagem_seg_1: dilatacao(dilatacao(erosao(erosao(imagem_seg_1,B8),B8),B4),B4) 
+imagem_morf_1 = erosao(imagem_seg_1,B8);
+imagem_morf_1 = erosao(imagem_morf_1,B8);
+figure, imshow(imagem_morf_1); title('Imagem1 erosao 2 x B8');
 
 imagem_morf_1 = dilatacao(imagem_morf_1,B4);
-figure, imshow(imagem_morf_1); title('Imagem1 dilatacao B4');
+imagem_morf_1 = dilatacao(imagem_morf_1,B4);
+figure, imshow(imagem_morf_1); title('Imagem1 dilatacao 2 x B4');
 
-% - imagem_seg_2: 
+% - imagem_seg_2: dilatacao(dilatacao(erosao(erosao(imagem_seg_1,B8),B8),B4),B4) 
+imagem_morf_2 = erosao(imagem_seg_2,B8);
+imagem_morf_2 = erosao(imagem_morf_2,B8);
+figure, imshow(imagem_morf_2); title('Imagem2 erosao 2 x B8');
+
+imagem_morf_2 = dilatacao(imagem_morf_2,B4);
+imagem_morf_2 = dilatacao(imagem_morf_2,B4);
+figure, imshow(imagem_morf_2); title('Imagem2 dilatacao 2 x B4');

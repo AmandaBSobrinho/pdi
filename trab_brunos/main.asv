@@ -11,7 +11,7 @@ figure, imshow(imagem_hsi); title('Imagem HSI');
 %segmenta a imagem usando threshold multilevel de otsu
 [imagem_seg_1, imagem_seg_2] = segment(imagem_hsi(:,:,3));
 figure, imshow(imagem_seg_1); title('Imagem seg 1');
-%figure, imshow(imagem_seg_2); title('Imagem seg 2');
+figure, imshow(imagem_seg_2); title('Imagem seg 2');
 
 %elementos estruturantes
 B4 = [0 1 0
@@ -23,11 +23,20 @@ B8 = [1 1 1
       1 1 1];
 
 %filtros morfológicos
-% - imagem_seg_1: fechamento(abertura(imagem_seg_1,B8), B8) 
+% - imagem_seg_1: erosao(abertura(imagem_seg_1,B8), B8) 
 imagem_morf_1 = erosao(imagem_seg_1,B8);
-figure, imshow(imagem_morf_1); title('Imagem erosao 1');
+imagem_morf_1 = erosao(imagem_morf_1,B8);
+figure, imshow(imagem_morf_1); title('Imagem1 erosao 2 x B8');
 
-imagem_morf_1 = dilatacao(imagem_morf_1,B8);
-figure, imshow(imagem_morf_1); title('Imagem erosao 1');
+imagem_morf_1 = dilatacao(imagem_morf_1,B4);
+imagem_morf_1 = dilatacao(imagem_morf_1,B4);
+figure, imshow(imagem_morf_1); title('Imagem1 dilatacao 2 x B4');
 
 % - imagem_seg_2: 
+imagem_morf_2 = erosao(imagem_seg_2,B8);
+imagem_morf_2 = erosao(imagem_morf_2,B8);
+figure, imshow(imagem_morf_2); title('Imagem2 erosao 2 x B8');
+
+imagem_morf_2 = dilatacao(imagem_morf_2,B4);
+imagem_morf_2 = dilatacao(imagem_morf_2,B4);
+figure, imshow(imagem_morf_2); title('Imagem2 dilatacao 2 x B4');

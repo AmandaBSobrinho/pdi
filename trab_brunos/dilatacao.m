@@ -1,4 +1,4 @@
-function E = dilatacao(original,estr)
+function D = dilatacao(original,estr)
 % Colocar padding de 0's em todos os lados
 originalPad = padarray(original,[1 1],1);
 % Inicializar a matriz D de tamanho igual ao da original com zeros
@@ -20,4 +20,4 @@ for i = 1:size(originalPad,1)-2 % tem que andar até size(originalPad,1)-2 porque
     end
 end
 
-E = saida;
+D = saida;
