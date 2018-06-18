@@ -20,7 +20,7 @@ function intLum = bloco(img, tamanhoBloco, qtdBlocoX, qtdBlocoY)
                 s = s + 1;
                 blocoImg(r,s) = img(i,j);   
                 if (i == ateX) & (j == ateY)
-                    intLum(z) = intensidade(blocoImg);
+                    intLum(z) = fractal_intensidade(blocoImg);
                     
                     if qbY < qtdBlocoY
                         qbY = qbY + 1;

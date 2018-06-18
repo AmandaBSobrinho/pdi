@@ -40,3 +40,18 @@ figure, imshow(imagem_morf_2); title('Imagem2 erosao 2 x B8');
 imagem_morf_2 = dilatacao(imagem_morf_2,B4);
 imagem_morf_2 = dilatacao(imagem_morf_2,B4);
 figure, imshow(imagem_morf_2); title('Imagem2 dilatacao 2 x B4');
+
+%dimensão fractal
+imagem_fractal_hsi = fractal_dim(imagem_hsi(:,:,3));
+imagem_fractal_1 = fractal_dim(imagem_morf_1);
+imagem_fractal_2 = fractal_dim(imagem_morf_2);
+
+%entropia
+%imagem_entro_hsi = entropia(imagem_hsi(:,:,3));
+imagem_entro_1 = entropia(imagem_morf_1);
+imagem_entro_2 = entropia(imagem_morf_2);
+
+%contagem de elementos
+cchsi = bwconncomp(imagem_hsi, 4); 
+cc1 = bwconncomp(imagem_morf_1, 4);
+cc2 = bwconncomp(imagem_morf_2, 4);
