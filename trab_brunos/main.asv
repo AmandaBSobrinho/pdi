@@ -6,13 +6,28 @@ imagem_hsi = rgb_to_hsi(double(imagem)/255);
 
 %equaliza somente a camada I
 imagem_hsi(:,:,3) = histo_eq(uint8(imagem_hsi(:,:,3) .* 255), info);
+figure, imshow(imagem_hsi); title('Imagem HSI');
 
-figure;
-imshow(imagem_hsi);
+%segmenta a imagem usando threshold multilevel de otsu
+[imagem_seg_1, imagem_seg_2] = segment(imagem_hsi(:,:,3));
+figure, imshow(imagem_seg_1); title('Imagem seg 1');
+%figure, imshow(imagem_seg_2); title('Imagem seg 2');
 
-quantized = quantize(imagem_hsi(:,:,3));
+%elementos estruturantes
+B4 = [0 1 0
+      1 1 1
+      0 1 0];
 
-rgb = label2rgb(quantized);
+B8 = [1 1 1
+      1 1 1
+      1 1 1];
 
-figure;
-imshow(rgb);
+%filtros morfológicos
+% - imagem_seg_1: fechamento(abertura(imagem_seg_1,B8), B8) 
+imagem_morf_1 = erosao(imagem_seg_1,B8);
+figure, imshow(imagem_morf_1); title('Imagem erosao 1');
+
+imagem_morf_1 = dilatacao(imagem_morf_1,B8);
+figure, imshow(imagem_morf_1); title('Imagem erosao 1');
+
+% - imagem_seg_2: 
