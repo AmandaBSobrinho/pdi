@@ -1,0 +1,35 @@
+function [matriz_confusao] = matriz_confusao(matriz_carac)
+
+    [m, n] = size(matriz_carac);
+    
+    tabela_ouro = zeros(2, 2, 3);
+    
+    matriz_confusao = zeros(m,4);
+    
+    for j=1:n-1
+        for i=1:m
+            corte = matriz_carac(i,j);
+            classe = matriz_carac(i,4);
+            for k=1:m
+                if corte >= matriz_carac(k,j) && classe == matriz_carac(k,4)
+                        
+                    tabela_ouro(1,1,j) = tabela_ouro(1,1,j) + 1;
+                elseif corte < matriz_carac(k,j) && classe == matriz_carac(k,4)
+                        
+                    tabela_ouro(2,1,j) = tabela_ouro(2,1,j) + 1;
+                elseif corte >= matriz_carac(k,j) && classe ~= matriz_carac(k,4)
+                        
+                    tabela_ouro(1,2,j) = tabela_ouro(1,2,j) + 1;
+                else
+                        
+                    tabela_ouro(2,2,j) = tabela_ouro(2,2,j) + 1;
+                end
+            end
+            matriz_confusao(i,2) = 1 - (matriz_confusao(2,2,j) / (matriz_confusao(1,2,j) + matriz_confusao(2,2,j)));
+            matriz_confusao(i,1) = (matriz_confusao(1,1,j) / (matriz_confusao(1,1,j) + matriz_confusao(2,1,j)));
+            matriz_confusao(i,3) = corte;
+            matriz_confusao(i,4) = 
+        end
+    end
+end
+

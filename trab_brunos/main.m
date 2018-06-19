@@ -70,8 +70,13 @@ B8 = [1 1 1
                       0.695726577197055 0.899912490777853 1463 -2;
                       0.697067000316488 0.942423281131780 902 -2;
                       0.666421209609657 0.966128924116884 251 -2];
- 
- 
+                  
+matriz_conf_hsi = matriz_confusao(matriz_carac_hsi);
+matriz_conf_seg1 = matriz_confusao(matriz_carac_seg1);
+matriz_conf_seg2 = matriz_confusao(matriz_carac_seg2);
+
+plot(matriz_conf_hsi(:,2,1), matriz_conf_hsi(:,1,1));
+
 % for i=1:size(imagem_A,1) + size(imagem_B,1)
 %     %lê imagem
 %     if i <= size(imagem_A,1)
